@@ -1,18 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   julia.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: proshchy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/02/23 13:55:41 by proshchy          #+#    #+#             */
-/*   Updated: 2018/02/23 13:55:42 by proshchy         ###   ########.fr       */
+/*   Created: 2018/03/05 14:10:22 by proshchy          #+#    #+#             */
+/*   Updated: 2018/03/05 14:10:33 by proshchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fractol.h"
 
-void	fract_calc(t_fract *fract, int iter)
+void	fractal_calc(t_fract *fract, int iter)
 {
 	fract->n = -1;
 	while (fract->n < iter && (fract->c_r * fract->c_r + fract->c_i * fract->c_i) < 4)
@@ -25,17 +25,17 @@ void	fract_calc(t_fract *fract, int iter)
 	}
 }
 
-void	mandelbrot_f(int iter, t_mlx *d, t_fract *fract)
+void	julia_f(int iter, t_mlx *d, t_fract *fract)
 {
 	fract->x = 0;
 	fract->y = 0;
 	while (fract->y < HEIGHT)
 	{
-		fract->c_r = (fract->x - WIDTH / 2.0) * (d->zoom) + d->move_x;
-		fract->c_i = (fract->y - HEIGHT / 2.0) * (d->zoom);// + OFF_Y;
-		fract->tmp_cr = fract->c_r;
-		fract->tmp_ci = fract->c_i;
-		fract_calc(fract, iter);
+		fract->c_r = (fract->x - WIDTH / 2.0) * (d->zoom);// * ZOOM);// + OFF_X;
+		fract->c_i = (fract->y - HEIGHT / 2.0) * (d->zoom); //* ZOOM); //+ OFF_Y;
+		fract->tmp_cr = 0;
+		fract->tmp_ci = 0.8;
+		fractal_calc(fract, iter);
 		d->z = fract->c_r * fract->c_r + fract->c_i * fract->c_i;
 		if (fract->n < iter)
 			ft_draw(fract->x, fract->y, fract->n, d);
