@@ -12,17 +12,41 @@
 
 #include "../include/fractol.h"
 
-void 	ft_draw(int x, int y, int iter, t_mlx *d)
+t_color		*color_init(t_fract *fract, t_mlx *d)
+{
+	t_color *color;
+
+	color = malloc(sizeof(t_color));
+	color->phase = 1;
+	color->width = 70;
+	color->center = 185;
+	if (d->color_scheme == 2)
+	{
+		color->phase = 3;
+		color->width = 235;
+		color->center = 20;
+	}
+	if (d->color_scheme == 3)
+	{
+		color->phase = 2;
+		color->width = 110;
+		color->center = 135;
+	}
+	return (color);
+}
+
+void 	ft_draw(t_fract *fract, t_mlx *d)
 {
 	int a;
-	int r;
-	int g;
-	int b;
 	double cont_index;
+	t_color *color;
 
-    a = (x * (d->bpp / 8)) + (y * d->s_line);
-    cont_index = (iter + 1) - (1 / d->z);
-    d->pixs[a] = sin(0.016 * cont_index + 4 + 3) * 235 + 20;
-    d->pixs[++a] = sin(0.013 * cont_index + 2 + 3) * 235 + 20;
-    d->pixs[++a] = sin(0.01 * cont_index + 1 + 3) * 235 + 20;
+	color = color_init(fract, d);
+	a = (fract->x * (d->bpp / 8)) + (fract->y * d->s_line);
+	cont_index = (fract->n + 1) - (1 / d->z);
+	color->freq = M_PI * 2 / d->iter;
+	d->pixs[a] = sin(color->freq * cont_index + 4 + color->phase) * color->width + color->center;
+	d->pixs[++a] = sin(color->freq * cont_index + 2 + color->phase) * color->width + color->center;
+	d->pixs[++a] = sin(color->freq * cont_index + 1 + color->phase) * color->width + color->center;
+	free(color);
 }

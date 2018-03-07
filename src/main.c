@@ -16,8 +16,14 @@ void	mlx_data_init(t_mlx *d)
 {
 	d->mlx = mlx_init();
 	d->win = mlx_new_window(d->mlx, WIDTH, HEIGHT, "Fractol");
-	d->zoom = 0.0036;
+	d->zoom = 0.0035;
 	d->move_x = 0;
+	d->move_y = 0;
+	d->color_scheme = 1;
+	d->iter = ITERS;
+	d->julia->tmp_cr = 0;
+	d->julia->tmp_ci = 0.8;
+
 }
 
 int		choice_check(t_mlx *d, char *str)
@@ -36,9 +42,9 @@ void	fractal_init(t_mlx *d)
 	d->img = mlx_new_image(d->mlx, WIDTH, HEIGHT);
 	d->pixs = mlx_get_data_addr(d->img, &(d->bpp), &(d->s_line), &(d->endian));
 	if (d->fract_type == M)
-		mandelbrot_f(ITERS, d, d->mandelbrot);
+		mandelbrot_f(d, d->mandelbrot);
 	else if (d->fract_type == J)
-		julia_f(ITERS, d, d->julia);
+		julia_f(d, d->julia);
 	mlx_put_image_to_window(d->mlx, d->win, d->img, 0, 0);
 }
 
@@ -59,11 +65,12 @@ int		main(int argc, char **argv)
 	julia = ft_memalloc(sizeof(t_fract));
 	d->mandelbrot = mandelbrot;
 	d->julia = julia;
-	if (argc != 2 || choice_check(d, argv[1]) || !d)
+	if (argc == 2 && (choice_check(d, argv[1]) != 0))
 	{
 			mlx_data_init(d);
 			mlx_expose_hook(d->win, expose_hook, d);
 			mlx_key_hook(d->win, key_hook, d);
+			mlx_hook(d->win, 6, 1L << 6, motion_hook, d);
 			mlx_loop(d->mlx);
 	}
 	ft_error("usage: ./fractol (Julia / Mandelbrot)\n");

@@ -28,28 +28,23 @@
 # define OFF_Y 0
 # define M 1
 # define J 2
-# define ITERS 100
+# define ITERS 51
 
 # define ESC 53
 # define LEFT 123
 # define RIGHT 124
 # define UP 126
 # define DOWN 125
-# define X_UP 91
-# define X_DOWN 84
-# define Y_RIGHT 88
-# define Y_LEFT 86
-# define Z_LEFT 89
-# define Z_RIGHT 92
 # define INCR 69
 # define DECR 78
-# define CENTER 49
+# define SCHEME 49
 # define PSX 106
 # define PSY 79
 # define NSX 64
 # define NSY 80
-# define STEP 50
- 
+# define DECR_I 75
+# define INCR_I 67
+
 typedef struct 	s_coord
 {
 	double 		x;
@@ -69,6 +64,14 @@ typedef struct 	s_fract
 	int 		y;
 }				t_fract;
 
+typedef struct 	s_color
+{
+	double		freq;
+	int 		phase;
+	int 		width;
+	int 		center;
+}				t_color;
+
 typedef struct	s_mlx
 {
 	void		*mlx;
@@ -83,18 +86,21 @@ typedef struct	s_mlx
 	double		move_y;
 	double		zoom;
 	double		z;
+	int 		iter;
 	int 		fract_type;
+	int 		color_scheme;
 	t_fract		*mandelbrot;
 	t_fract		*julia;
-}				t_mlx;
+}				t_mlx;	
 
-void			mandelbrot_f(int iter, t_mlx *d, t_fract *fract);
-void			julia_f(int iter, t_mlx *d, t_fract *fract);
-void			ft_draw(int x, int y, int iter, t_mlx *d);
+void			mandelbrot_f(t_mlx *d, t_fract *fract);
+void			julia_f(t_mlx *d, t_fract *fract);
+void			ft_draw(t_fract *fract, t_mlx *d);
 void			mlx_data_init(t_mlx *d);
 int 			key_hook(int key, t_mlx *d);
 int				ft_error(char *str);
 int 			expose_hook(t_mlx *d);
+int				motion_hook(int x, int y, t_mlx *d);
 #endif
 
 

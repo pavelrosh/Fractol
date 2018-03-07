@@ -14,7 +14,7 @@
 
 void	fract_calc(t_fract *fract, int iter)
 {
-	fract->n = -1;
+	fract->n = 0;
 	while (fract->n < iter && (fract->c_r * fract->c_r + fract->c_i * fract->c_i) < 4)
 	{
 		fract->c_rr = fract->c_r * fract->c_r - fract->c_i * fract->c_i;
@@ -25,20 +25,21 @@ void	fract_calc(t_fract *fract, int iter)
 	}
 }
 
-void	mandelbrot_f(int iter, t_mlx *d, t_fract *fract)
+void	mandelbrot_f(t_mlx *d, t_fract *fract)
 {
 	fract->x = 0;
 	fract->y = 0;
+	fract->n = 0;
 	while (fract->y < HEIGHT)
 	{
 		fract->c_r = (fract->x - WIDTH / 2.0) * (d->zoom) + d->move_x;
-		fract->c_i = (fract->y - HEIGHT / 2.0) * (d->zoom);// + OFF_Y;
+		fract->c_i = (fract->y - HEIGHT / 2.0) * (d->zoom) + d->move_y;
 		fract->tmp_cr = fract->c_r;
 		fract->tmp_ci = fract->c_i;
-		fract_calc(fract, iter);
+		fract_calc(fract, d->iter);
 		d->z = fract->c_r * fract->c_r + fract->c_i * fract->c_i;
-		if (fract->n < iter)
-			ft_draw(fract->x, fract->y, fract->n, d);
+		if (fract->n < d->iter)
+			ft_draw(fract, d);
 		if (fract->x < (WIDTH - 1))
 			fract->x++;
 		else
