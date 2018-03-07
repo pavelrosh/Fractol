@@ -14,12 +14,9 @@
 
 void	mlx_data_init(t_mlx *d)
 {
-	d->mlx = mlx_init();
-	d->win = mlx_new_window(d->mlx, WIDTH, HEIGHT, "Fractol");
 	d->zoom = 0.0035;
 	d->move_x = 0;
 	d->move_y = 0;
-	d->color_scheme = 1;
 	d->iter = ITERS;
 	d->julia->tmp_cr = 0;
 	d->julia->tmp_ci = 0.8;
@@ -67,11 +64,14 @@ int		main(int argc, char **argv)
 	d->julia = julia;
 	if (argc == 2 && (choice_check(d, argv[1]) != 0))
 	{
-			mlx_data_init(d);
-			mlx_expose_hook(d->win, expose_hook, d);
-			mlx_key_hook(d->win, key_hook, d);
-			mlx_hook(d->win, 6, 1L << 6, motion_hook, d);
-			mlx_loop(d->mlx);
+		d->mlx = mlx_init();
+		d->win = mlx_new_window(d->mlx, WIDTH, HEIGHT, "Fractol");
+		mlx_data_init(d);
+		mlx_expose_hook(d->win, expose_hook, d);
+		mlx_key_hook(d->win, key_hook, d);
+		mlx_hook(d->win, 6, 1L << 6, motion_hook, d);
+		mlx_mouse_hook(d->win, mouse_hook, d);
+		mlx_loop(d->mlx);
 	}
 	ft_error("usage: ./fractol (Julia / Mandelbrot)\n");
 	return (0);

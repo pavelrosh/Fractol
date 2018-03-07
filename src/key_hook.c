@@ -22,6 +22,12 @@ void	move_hook(int key, t_mlx *d)
 		d->move_y += 0.4;
 	if (key == DOWN)
 		d->move_y -= 0.4;
+	if (key == SCHEME)
+	{
+		d->color_scheme++;
+		if (d->color_scheme > 3)
+			d->color_scheme = 1;
+	}
 }
 
 void	zoom_iter_hook(int key, t_mlx *d)
@@ -33,7 +39,21 @@ void	zoom_iter_hook(int key, t_mlx *d)
 	if (key == INCR_I)
 		d->iter += 5;
 	if (key == DECR_I)
-		d->iter -= 5; 
+		d->iter -= 5;
+}
+
+void	fract_type_hook(int key, t_mlx *d)
+{
+	if (key == PSX)
+	{
+		d->fract_type = 1;
+		mlx_data_init(d);
+	}
+	if (key == NSX)
+	{
+		d->fract_type = 2;
+		mlx_data_init(d);
+	}
 }
 
 int 	key_hook(int key, t_mlx *d)
@@ -45,12 +65,8 @@ int 	key_hook(int key, t_mlx *d)
 	}
 	move_hook(key, d);
 	zoom_iter_hook(key, d);
-	if (key == SCHEME)
-	{
-		d->color_scheme++;
-		if (d->color_scheme > 3)
-			d->color_scheme = 1;
-	}
+	fract_type_hook(key, d);
+	mlx_destroy_image(d->mlx, d->img);
 	expose_hook(d);
 	return (0);
 }

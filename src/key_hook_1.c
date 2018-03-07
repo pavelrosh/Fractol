@@ -24,3 +24,13 @@ int		motion_hook(int x, int y, t_mlx *d)
 	expose_hook(d);
 	return (0);
 }
+
+int		mouse_hook(int key, int x, int y, t_mlx *d)
+{
+	if (key == MOUSE_UP)
+		d->zoom *= 0.9;
+	if (key == MOUSE_DOWN)
+		d->zoom *= 1.1;
+	expose_hook(d);
+	return (0);
+}

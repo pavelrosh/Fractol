@@ -17,6 +17,7 @@
 # include <fcntl.h>
 # include <math.h>
 # include <stdio.h>
+# include <pthread.h>
 # include "libft.h"
 # include "mlx.h"
 
@@ -44,6 +45,8 @@
 # define NSY 80
 # define DECR_I 75
 # define INCR_I 67
+# define MOUSE_UP 5
+# define MOUSE_DOWN 4
 
 typedef struct 	s_coord
 {
@@ -95,12 +98,15 @@ typedef struct	s_mlx
 
 void			mandelbrot_f(t_mlx *d, t_fract *fract);
 void			julia_f(t_mlx *d, t_fract *fract);
+void			burning_ship_f(t_mlx *d, t_fract *fract);
 void			ft_draw(t_fract *fract, t_mlx *d);
 void			mlx_data_init(t_mlx *d);
 int 			key_hook(int key, t_mlx *d);
 int				ft_error(char *str);
 int 			expose_hook(t_mlx *d);
 int				motion_hook(int x, int y, t_mlx *d);
+int 			mouse_hook(int key, int x, int y, t_mlx *d);
+void			mlx_data_init(t_mlx *d);
 #endif
 
 
