@@ -15,13 +15,13 @@
 void	move_hook(int key, t_mlx *d)
 {
 	if (key == LEFT)
-		d->move_x += 0.4;
+		d->move_x += 0.4 * d->zoom * 100;
 	if (key == RIGHT)
-		d->move_x -= 0.4;
+		d->move_x -= 0.4 * d->zoom * 100;
 	if (key == UP)
-		d->move_y += 0.4;
+		d->move_y += 0.4 * d->zoom * 100;
 	if (key == DOWN)
-		d->move_y -= 0.4;
+		d->move_y -= 0.4 * d->zoom * 100;
 	if (key == SCHEME)
 	{
 		d->color_scheme++;
@@ -46,12 +46,17 @@ void	fract_type_hook(int key, t_mlx *d)
 {
 	if (key == PSX)
 	{
-		d->fract_type = 1;
+		d->fract_type = M;
 		mlx_data_init(d);
 	}
 	if (key == NSX)
 	{
-		d->fract_type = 2;
+		d->fract_type = J;
+		mlx_data_init(d);
+	}
+	if (key == PSY)
+	{
+		d->fract_type = B;
 		mlx_data_init(d);
 	}
 }

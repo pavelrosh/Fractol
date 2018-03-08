@@ -19,8 +19,9 @@ int		motion_hook(int x, int y, t_mlx *d)
 
 	new_cr = (1 / (double)WIDTH * (double)x * 4) - 2;
 	new_ci = (1 / (double)HEIGHT * (double)y * 4) - 2;
-	d->julia->tmp_cr = new_cr;
-	d->julia->tmp_ci = new_ci;
+	d->tmp_cr = new_cr;
+	d->tmp_ci = new_ci;
+	// printf("%f\n", d->tmp_cr);
 	expose_hook(d);
 	return (0);
 }

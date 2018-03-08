@@ -12,7 +12,7 @@
 
 #include "../include/fractol.h"
 
-t_color		*color_init(t_fract *fract, t_mlx *d)
+t_color		*color_init(t_fract *fract)
 {
 	t_color *color;
 
@@ -20,13 +20,13 @@ t_color		*color_init(t_fract *fract, t_mlx *d)
 	color->phase = 1;
 	color->width = 70;
 	color->center = 185;
-	if (d->color_scheme == 2)
+	if (fract->color_scheme == 2)
 	{
 		color->phase = 3;
 		color->width = 235;
 		color->center = 20;
 	}
-	if (d->color_scheme == 3)
+	if (fract->color_scheme == 3)
 	{
 		color->phase = 2;
 		color->width = 110;
@@ -41,10 +41,10 @@ void 	ft_draw(t_fract *fract, t_mlx *d)
 	double cont_index;
 	t_color *color;
 
-	color = color_init(fract, d);
-	a = (fract->x * (d->bpp / 8)) + (fract->y * d->s_line);
-	cont_index = (fract->n + 1) - (1 / d->z);
-	color->freq = M_PI * 2 / d->iter;
+	color = color_init(fract);
+	a = (fract->x * (d->bpp / 8)) + (fract->y_start * d->s_line);
+	cont_index = (fract->n + 1) - (1 / fract->z);
+	color->freq = M_PI * 2 / fract->iter;
 	d->pixs[a] = sin(color->freq * cont_index + 4 + color->phase) * color->width + color->center;
 	d->pixs[++a] = sin(color->freq * cont_index + 2 + color->phase) * color->width + color->center;
 	d->pixs[++a] = sin(color->freq * cont_index + 1 + color->phase) * color->width + color->center;
