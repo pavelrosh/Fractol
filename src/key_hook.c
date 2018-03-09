@@ -6,7 +6,7 @@
 /*   By: proshchy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 13:56:33 by proshchy          #+#    #+#             */
-/*   Updated: 2018/03/05 13:56:35 by proshchy         ###   ########.fr       */
+/*   Updated: 2018/03/09 18:00:50 by proshchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,26 +42,26 @@ void	zoom_iter_hook(int key, t_mlx *d)
 		d->iter -= 5;
 }
 
-void	fract_type_hook(int key, t_mlx *d)
+int		fract_type_hook(int key, t_mlx *d)
 {
-	if (key == PSX)
-	{
+	if (key == 18)
 		d->fract_type = M;
-		mlx_data_init(d);
-	}
-	if (key == NSX)
-	{
+	else if (key == 19)
 		d->fract_type = J;
-		mlx_data_init(d);
-	}
-	if (key == PSY)
-	{
+	else if (key == 20)
 		d->fract_type = B;
-		mlx_data_init(d);
-	}
+	else if (key == 21)
+		d->fract_type = N;
+	else if (key == 23)
+		d->fract_type = C;
+	else
+		return (0);
+	mlx_data_init(d);
+	expose_hook(d);
+	return (0);
 }
 
-int 	key_hook(int key, t_mlx *d)
+int		key_hook(int key, t_mlx *d)
 {
 	if (key == ESC)
 	{

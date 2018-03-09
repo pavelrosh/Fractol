@@ -10,22 +10,52 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = mlx
-MACFLAGS = -framework OpenGL -framework AppKit -lmlx
-# WINFLAGS = -L minilibx/ -lmlx -lXext -L/usr/X11/lib -lX11 -lm
-CFLAGS = -Wall -Wextra -Werror
-LIBFT = libft/libft.a
-SRCS = src/*.c
+NAME = fractol
+SRC = src/main.c \
+src/burning_ship.c \
+src/draw.c \
+src/infin_cube.c \
+src/julia.c \
+src/key_hook.c \
+src/key_hook_1.c \
+src/mandelbrot.c \
+src/newton.c
+
+OBJ = $(SRC:.c=.o)
+CFLAGS = -Wall -Wextra -Werror -O3 -pthread
+GFLAGS = -lmlx -framework OpenGL -framework AppKit 
 
 all: $(NAME)
 
-$(NAME): 
-	@gcc $(SRCS) $(LIBFT) $(MACFLAGS)
+$(NAME): lib $(OBJ)
+	@gcc $(OBJ) libft/libft.a -I libft -o $(NAME) $(GFLAGS)
 
-clean :
-	@rm a.out
-	
-re: clean
-	$(NAME)
-	
-.PHONY: all clean re
+%.o: %.c fractol.h
+	gcc $(CFLAGS) -c -o $@ $<
+
+clean:
+	rm -f $(OBJ)
+	make clean -C libft
+
+fclean: clean
+	rm -f $(NAME)
+	rm -f libft/libft.a
+
+re: fclean all
+
+lib:
+	make -C libft
+normin:
+	norminette $(SRC)
+
+.PHONY: all clean re lib
+
+
+
+
+
+
+
+
+
+

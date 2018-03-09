@@ -6,7 +6,7 @@
 /*   By: proshchy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/02/23 13:55:59 by proshchy          #+#    #+#             */
-/*   Updated: 2018/02/23 13:56:02 by proshchy         ###   ########.fr       */
+/*   Updated: 2018/03/09 18:11:07 by proshchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <stdio.h>
 # include <pthread.h>
 
-# include "libft.h"
+# include "../libft/libft.h"
 # include "mlx.h"
 
 # define WIDTH 1200
@@ -31,7 +31,10 @@
 # define M 1
 # define J 2
 # define B 3
+# define N 4
+# define C 5
 # define ITERS 51
+# define MAX_KEY 23
 
 # define ESC 53
 # define LEFT 123
@@ -64,17 +67,14 @@ typedef struct	s_mlx
 	double		move_y;
 	double		zoom;
 	double		z;
-	int 		iter;
-	int 		fract_type;
-	int 		color_scheme;
+	int			iter;
+	int			fract_type;
+	int			color_scheme;
 	double		tmp_cr;
 	double		tmp_ci;
-	// t_fract		*mandelbrot;
-	// t_fract		*julia;
-	// t_fract		*burnship;
 }				t_mlx;
 
-typedef struct 	s_fract
+typedef struct	s_fract
 {
 	double		c_r;
 	double		c_i;
@@ -86,71 +86,40 @@ typedef struct 	s_fract
 	double		move_y;
 	double		zoom;
 	double		z;
-	int 		n;
-	int 		x;
-	int 		y_start;
-	int 		y_end;
-	int 		iter;
-	int 		fract_type;
-	int 		color_scheme;
-	// int			s_line;
+	int			n;
+	int			x;
+	int			y_start;
+	int			y_end;
+	int			iter;
+	int			fract_type;
+	int			color_scheme;
 	t_mlx		*d;
 }				t_fract;
 
-typedef struct 	s_color
+typedef struct	s_color
 {
 	double		freq;
-	int 		phase;
-	int 		width;
-	int 		center;
+	int			phase;
+	int			width;
+	int			center;
 }				t_color;
 
-typedef struct 	s_coord
-{
-	t_mlx		*d;
-}				t_coord;
-
-// void			mandelbrot_f(t_mlx *d, t_fract *fract);
 void			*mandelbrot_f(void *args);
-// void			julia_f(t_mlx *d, t_fract *fract);
 void			*julia_f(void *args);
-// void			burning_ship_f(t_mlx *d, t_fract *fract);
 void			*burning_ship_f(void *args);
+void			*newton_f(void *args);
+void			*infin_cube_f(void *args);
 void			ft_draw(t_fract *fract, t_mlx *d);
 void			mlx_data_init(t_mlx *d);
-int 			key_hook(int key, t_mlx *d);
+int				key_hook(int key, t_mlx *d);
 int				ft_error(char *str);
-int 			expose_hook(t_mlx *d);
+int				expose_hook(t_mlx *d);
 int				motion_hook(int x, int y, t_mlx *d);
-int 			mouse_hook(int key, int x, int y, t_mlx *d);
+int				mouse_hook(int key, int x, int y, t_mlx *d);
 void			mlx_data_init(t_mlx *d);
 void			p_tread_init(t_mlx *d);
 void			p_tread_init_j(t_mlx *d);
 void			p_tread_init_b(t_mlx *d);
+void			p_tread_init_n(t_mlx *d);
+void			p_tread_init_infc(t_mlx *d);
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

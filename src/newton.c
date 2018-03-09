@@ -1,32 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   julia.c                                            :+:      :+:    :+:   */
+/*   newton.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: proshchy <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/05 14:10:22 by proshchy          #+#    #+#             */
-/*   Updated: 2018/03/09 17:59:52 by proshchy         ###   ########.fr       */
+/*   Created: 2018/03/09 14:44:18 by proshchy          #+#    #+#             */
+/*   Updated: 2018/03/09 17:55:34 by proshchy         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/fractol.h"
 
-void	calc_julia(t_fract *fract, int iter)
+void	calc_newton(t_fract *fract, int iter)
 {
 	fract->n = 0;
-	while (fract->n < iter && (fract->c_r * fract->c_r +
-		fract->c_i * fract->c_i) < 4)
+	while (fract->n < iter && fract->c_rr > 0.000001)
 	{
-		fract->c_rr = fract->c_r * fract->c_r - fract->c_i * fract->c_i;
-		fract->c_ii = 2 * fract->c_r * fract->c_i;
-		fract->c_r = fract->c_rr + fract->d->tmp_cr;
-		fract->c_i = fract->c_ii + fract->d->tmp_ci;
+		fract->tmp_cr = fract->c_r;
+		fract->tmp_ci = fract->c_i;
+		fract->c_rr = (fract->c_r * fract->c_r + fract->c_i * fract->c_i)
+		* (fract->c_r * fract->c_r + fract->c_i * fract->c_i);
+		fract->c_r = (2 * fract->c_r * fract->c_rr + fract->c_r
+			* fract->c_r - fract->c_i * fract->c_i) / (3.0 * fract->c_rr);
+		fract->c_i = (2 * fract->c_i * (fract->c_rr - fract->tmp_cr))
+		/ (3.0 * fract->c_rr);
+		fract->c_rr = (fract->c_r - fract->tmp_cr) *
+			(fract->c_r - fract->tmp_cr)
+		+ (fract->c_i - fract->tmp_ci) * (fract->c_i - fract->tmp_ci);
 		fract->n++;
 	}
 }
 
-void	*julia_f(void *args)
+void	*newton_f(void *args)
 {
 	t_fract *fract;
 
@@ -36,11 +42,11 @@ void	*julia_f(void *args)
 		fract->x = 0;
 		while (fract->x < WIDTH)
 		{
-			fract->c_r = (fract->x - WIDTH / 2.0) *
-				fract->zoom + fract->move_x;
-			fract->c_i = (fract->y_start - HEIGHT / 2.0) *
-				fract->zoom + fract->move_y;
-			calc_julia(fract, fract->iter);
+			fract->c_r = (fract->x - WIDTH / 2.0) * fract->zoom + fract->move_x;
+			fract->c_i = (fract->y_start - HEIGHT / 2.0) * fract->zoom +
+				fract->move_y;
+			fract->c_rr = 3.0;
+			calc_newton(fract, fract->iter);
 			fract->z = fract->c_r * fract->c_r + fract->c_i * fract->c_i;
 			if (fract->n < fract->iter)
 				ft_draw(fract, fract->d);
@@ -51,7 +57,7 @@ void	*julia_f(void *args)
 	pthread_exit(0);
 }
 
-void	p_tread_init_j(t_mlx *d)
+void	p_tread_init_n(t_mlx *d)
 {
 	pthread_t	thread[16];
 	t_fract		fract[16];
@@ -68,7 +74,7 @@ void	p_tread_init_j(t_mlx *d)
 		fract[i].iter = d->iter;
 		fract[i].color_scheme = d->color_scheme;
 		fract[i].d = d;
-		pthread_create(&(thread[i]), NULL, julia_f, (void *)&(fract[i]));
+		pthread_create(&(thread[i]), NULL, newton_f, (void *)&(fract[i]));
 		i++;
 	}
 	i = 0;
